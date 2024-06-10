@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@100..900&family=Space+Grotesk:wght@300..700&display=swap');
+
+$body-font-family: 'Space Grotesk', sans-serif;
+$titles-font-family: 'Heebo', sans-serif;
+
+$typoHeadingOptions: text-h1, text-sm-h1, text-md-h1, text-lg-h1, text-h2, text-sm-h2, text-md-h2,
+  text-lg-h2, text-h3, text-sm-h3, text-md-h3, text-lg-h3, text-h4, text-sm-h4, text-md-h4,
+  text-lg-h4, text-h5, text-sm-h5, text-md-h5, text-lg-h5, text-h6, text-sm-h6, text-md-h6,
+  text-lg-h6, headline, title, subtitle-1, subtitle-2;
+
+$typoOptions: text-body-1, text-sm-body-1, text-md-body-1, text-lg-body-1, text-body-2,
+  text-sm-body-2, text-md-body-2, text-lg-body-2, text-caption;
+#app {
+  font-family: $body-font-family, sans-serif !important;
+
+  @each $typoHeadingOption in $typoHeadingOptions {
+    .#{$typoHeadingOption} {
+      font-family: $titles-font-family, sans-serif !important;
+    }
+  }
+  @each $typoOption in $typoOptions {
+    .#{$typoOption} {
+      font-family: $body-font-family, sans-serif !important;
+    }
+  }
+}
+
+body,
+html {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 16px;
+  line-height: 1.53rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-smooth: auto;
+}
+body {
+  color: rgb(var(--v-theme-text));
+  background-color: rgb(var(--v-theme-background));
+  -webkit-transition: background-color 0.5s;
+  -o-transition: background-color 0.5s;
+  -moz-transition: background-color 0.5s;
+  transition: background-color 0.5s;
+
+  .v-autocomplete__mask {
+    color: rgb(var(--v-theme-primary));
+    background-color: rgba(var(--v-theme-primary), 0.2);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 0.6em;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 5px;
+  background-color: rgb(var(--v-theme-scrollBarBackground));
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: rgb(var(--v-theme-scrollBar));
+}
+a {
+  text-decoration: none;
+}
+b {
+  font-weight: 600;
+  color: rgb(var(--v-theme-primary));
+}
+
+.justify-space-between {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
