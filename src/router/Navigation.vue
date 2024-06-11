@@ -1,6 +1,9 @@
 <template>
   <v-app-bar color="containerBackground">
-    <router-link class="logo" to="/"><img :src="getLogo()" /></router-link>
+    <router-link class="logo" to="/"
+      ><img v-if="theme.global.name.value === 'dark'" src="../assets/logo-white.svg" />
+      <img v-else src="../assets/logo.svg"
+    /></router-link>
     <v-spacer></v-spacer>
     <v-col cols="auto">
       <v-btn
@@ -17,12 +20,6 @@ import { useTheme } from 'vuetify'
 
 const theme = useTheme()
 
-function getLogo() {
-  if (theme.global.name.value === 'dark') {
-    return '/src/assets/logo-white.svg'
-  }
-  return '/src/assets/logo.svg'
-}
 function toggleTheme() {
   theme.global.name.value = theme.global.name.value === 'dark' ? 'light' : 'dark'
 }
