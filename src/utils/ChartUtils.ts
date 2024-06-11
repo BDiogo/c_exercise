@@ -1,9 +1,8 @@
-import type { CardMapped, Data } from '@/shared/interface/Data'
+import type { CardMapped, Data, DropdownOption, MappedData } from '@/shared/interface/Data'
 import { Utils } from './Utils'
 
 export class ChartUtils {
-  static maxNumDays = Array.from({ length: 31 }, (_, index) => index + 1)
-  static getHeatmapOptions(theme: string) {
+  static getHeatmapOptions(theme: string, selectedFilter: DropdownOption) {
     return {
       theme: {
         mode: theme
@@ -38,7 +37,6 @@ export class ChartUtils {
       xaxis: {
         type: 'category',
         categories: Array.from({ length: 31 }, (_, index) => index + 1),
-
         labels: {
           style: {
             colors: '#8c99a8'
@@ -67,7 +65,7 @@ export class ChartUtils {
           val: number,
           e: { dataPointIndex: number; seriesIndex: number; value: number }
         ) => {
-          return val
+          return Utils.formatNumberWithSpaceSeparator(val)
         }
       },
 
@@ -77,60 +75,80 @@ export class ChartUtils {
           const dataPoint = val.w.config.series[val.seriesIndex].data[val.dataPointIndex]
           return `<div class="apexcharts-tooltip-text"><span class="hightlight">${
             dataPoint.date
-          } ${Utils.getMonthName(dataPoint.x, true)}</span><br>${dataPoint.y} Events </div>`
+          } ${Utils.getMonthName(
+            dataPoint.x,
+            true
+          )}</span><br>${Utils.formatNumberWithSpaceSeparator(dataPoint.y)} ${
+            selectedFilter.smallLabel
+          } </div>`
         }
       }
     }
   }
 
-  static mapHeatmapData(data: Data, year: number): { name: string; data: any[] }[] {
-    const newSeries = []
-    if (data[year]?.c) {
-      const yearData = data[year]
-      for (let key in yearData) {
-        if (yearData.hasOwnProperty(key) && yearData[key]?.c) {
-          const dataa = this.maxNumDays.map((e) => {
-            const date = Utils.validateAndGetDayOfWeek(e, parseInt(key), year)
-            return {
-              y: yearData[key][e]?.c || (date ? 0 : undefined),
-              x: key,
-              year: year,
-              date: e
-            }
-          })
-          newSeries.unshift({
-            name: Utils.getMonthName(parseInt(key)),
-            data: dataa
-          })
+  static mapHeatmapData(
+    data: MappedData[],
+    filterOptions: DropdownOption
+  ): { name: string; data: any[] }[] {
+    return data
+      .sort((a, b) => b.month - a.month)
+      .map((monthData) => {
+        return {
+          name: Utils.getMonthName(monthData.month),
+          data: monthData.data.map((dateData) => ({
+            y: dateData?.[filterOptions.id] || (dateData.week ? 0 : undefined),
+            x: String(dateData.date),
+            year: dateData.year,
+            date: dateData.date
+          }))
         }
-      }
-      if (newSeries.length) {
-        return newSeries
-      }
-    }
-    return []
+      })
   }
-  static getCards(data: Data, year: number): CardMapped[] {
-    const dates: CardMapped[] = []
-    Object.keys(data[year]).forEach((month) => {
-      const monthData = data[year][parseInt(month)]
-      if (monthData?.c) {
-        Object.keys(monthData)?.forEach((date) => {
-          const dateData = data[year][parseInt(month)][parseInt(date)]
-          if (dateData?.c) {
-            dates.push({
-              ...dateData,
-              date: parseInt(date),
-              year,
-              month: parseInt(month),
-              durPerEvent: Utils.roundNumber(dateData.dur / dateData.s, 2),
-              cPerEvent: Utils.roundNumber(dateData.c / dateData.s, 2)
-            })
+  static getMappedData(data: Data, year: number, filterOptions: DropdownOption): MappedData[] {
+    return Object.keys(data[year])
+      .map((monthStr) => {
+        const monthNum = parseInt(monthStr)
+        const monthData = data[year][monthNum]
+
+        if (monthData?.[filterOptions.verify]) {
+          return {
+            month: monthNum,
+            data: Object.keys(monthData)
+              .map((dateStr) => {
+                const dateNum = parseInt(dateStr)
+                const dateData = monthData[dateNum]
+
+                if (dateData?.[filterOptions.verify]) {
+                  return {
+                    ...dateData,
+                    date: dateNum,
+                    year,
+                    week: Utils.validateAndGetDayOfWeek(dateNum, monthNum, year),
+                    month: monthNum,
+                    durPerEvent: Utils.roundNumber(dateData.dur / dateData.c, 2),
+                    sPerEvent: Utils.roundNumber(dateData.s / dateData.c, 2)
+                  }
+                }
+              })
+              .filter(Boolean)
           }
-        })
-      }
-    })
+        }
+      })
+      .filter(Boolean) as MappedData[]
+  }
 
-    return dates.sort((a, b) => b.c - a.c).slice(0, 3)
+  static getThreeCards(dates: MappedData[], variableToCompare: DropdownOption): CardMapped[] {
+    return dates
+      .flatMap((item) => item.data)
+      .sort((a, b) => {
+        const aValue = a?.[variableToCompare.id]
+        const bValue = b?.[variableToCompare.id]
+
+        if (typeof aValue === 'number' && typeof bValue === 'number') {
+          return bValue - aValue
+        }
+        return 0
+      })
+      .slice(0, 3)
   }
 }

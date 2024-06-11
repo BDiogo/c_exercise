@@ -1,7 +1,59 @@
-import type { Data } from '@/shared/interface/Data'
+import type { Data, DropdownOption } from '@/shared/interface/Data'
 
 export class Utils {
   static readonly shortDaysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+
+  static getDataOptions(): DropdownOption[] {
+    return [
+      {
+        id: 'c',
+        label: 'Total Events Count',
+        smallLabel: 'Events',
+        icon: 'mdi-counter',
+        verify: 'c'
+      },
+      {
+        id: 's',
+        label: 'Total Sum of Money ',
+        smallLabel: '$',
+        icon: 'mdi-counter',
+        verify: 's'
+      },
+      {
+        id: 'dur',
+        label: 'Total Duration of Events',
+        smallLabel: 's',
+        icon: 'mdi-cash',
+        verify: 'dur'
+      },
+      {
+        id: 'durPerEvent',
+        label: 'Avg Duration of Events',
+        smallLabel: 's per Event',
+        icon: 'mdi-clock-outline',
+        verify: 'dur'
+      },
+      {
+        id: 'sPerEvent',
+        label: 'Avg Sum of money',
+        smallLabel: '$ per Event',
+        icon: 'mdi-cash',
+        verify: 's'
+      }
+    ]
+  }
+
+  static formatNumberWithSpaceSeparator(number: any): string {
+    let strNumber = number.toString()
+    let parts = []
+    while (strNumber.length > 3) {
+      parts.unshift(strNumber.slice(-3))
+      strNumber = strNumber.slice(0, -3)
+    }
+    parts.unshift(strNumber)
+
+    return parts.join(' ')
+  }
 
   static getMonthName(monthStr: number, short?: boolean): string {
     return new Date(new Date().setUTCMonth(monthStr - 1)).toLocaleString('default', {

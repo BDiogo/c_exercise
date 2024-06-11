@@ -6,7 +6,8 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "types": ["vuetify"]
+    "types": ["vuetify"],
+    "lib": ["es2019"]
   },
 
   "references": [
