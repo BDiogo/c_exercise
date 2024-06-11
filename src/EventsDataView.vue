@@ -28,7 +28,7 @@
           <v-card-text class="py-0">
             <v-row align="center" no-gutters>
               <v-col cols="8" sm="6">
-                <span class="text-h2 text-bold"
+                <span class="text-h2 text-bold nowrap"
                   >{{ Utils.formatNumberWithSpaceSeparator(card?.[selectedFilter.id]) }} <br
                 /></span>
                 {{ selectedFilter.label }}
@@ -135,6 +135,9 @@ onUnmounted(() => {
 
   .text-h5 {
     font-weight: 500;
+  }
+  .nowrap {
+    white-space: nowrap;
   }
 }
 </style>

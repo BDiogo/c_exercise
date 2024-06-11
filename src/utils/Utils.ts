@@ -28,14 +28,14 @@ export class Utils {
       },
       {
         id: 'durPerEvent',
-        label: 'Avg Duration of Events',
+        label: 'Avg Duration per Event',
         smallLabel: 's per Event',
         icon: 'mdi-clock-outline',
         verify: 'dur'
       },
       {
         id: 'sPerEvent',
-        label: 'Avg Sum of money',
+        label: 'Avg Sum of money per Event',
         smallLabel: '$ per Event',
         icon: 'mdi-cash',
         verify: 's'
