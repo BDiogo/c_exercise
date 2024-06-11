@@ -31,8 +31,6 @@ npm install
 
 ```sh
 npm run dev
-
-json-server --watch words.json
 ```
 
 ### Type-Check, Compile and Minify for Production
