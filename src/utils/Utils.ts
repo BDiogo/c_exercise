@@ -1,24 +1,23 @@
+import type { Data } from '@/shared/interface/Data'
+
 export class Utils {
-  static getMaxInputLength(): number {
-    return 255
+  static getMonthName(monthStr: number): string {
+    return new Date(new Date().setUTCMonth(monthStr - 1)).toLocaleString('default', {
+      month: 'long'
+    })
   }
 
-  static isStringEmpty(value: string): boolean {
-    return !value?.trim().length
+  static mapHeatmapData(data: Data, year: number) {
+    if (data && data[year]?.c) {
+      const yearData = data[year]
+      for (let key in yearData) {
+        if (yearData.hasOwnProperty(key) && yearData[key]?.c) {
+          const dataa = Object.keys((e: string) => yearData[key][parseInt(e)]?.c || 0)
+        }
+      }
+    }
   }
-
-  static areStringsEqual(first: string, second: string): boolean {
-    return first === second
-  }
-
-  static isEmailValid(value: string): boolean {
-    return /.+@.+\..+/g.test(value)
-  }
-
-  static isUsernameValid(value: string) {
-    return /([._-]|[a-zA-Z0-9]){3,18}([a-zA-Z0-9]|[._-])$/g.test(value)
-  }
-  static isStr(s: unknown) {
-    return typeof s === 'string' || s instanceof String
+  static roundNumber(number: number, decimalCases: number) {
+    return parseFloat(number.toFixed(decimalCases))
   }
 }

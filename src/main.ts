@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, ref } from 'vue'
 import App from './App.vue'
 import router from './router'
 import { createStore } from 'vuex'
@@ -13,6 +13,7 @@ import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/dist/vuetify.min.css'
 import 'vuetify/lib/styles/main.sass'
 import './styles.scss'
+import type { Data } from './shared/interface/Data'
 
 const app = createApp(App)
 
@@ -87,20 +88,24 @@ const vuetify = createVuetify({
 const store = createStore({
   state() {
     return {
-      // words: ref<wordsTypeClass[]>([]),
+      year: 2022,
+      eventsData: ref<Data>({} as Data)
     }
   },
   mutations: {
-    /*getTopics(state, response) {
-      state.topics.value = response
-    },
-    */
+    getEventsData(state, response) {
+      state.eventsData.value = response
+    }
   },
   actions: {
-    async getWords({ commit }) {
-      axios.get('/api/word').then((resp) => {
-        commit('getWords', resp.data)
-      })
+    async getEventsData({ commit }) {
+      axios
+        .get(
+          'https://gist.githubusercontent.com/ar2rsawseen/3cb5565f6fff3ef70e7cf42eb39c8c83/raw/211d8f16c9921afab813f1b512f2241dce6384dd/2_task_data.json'
+        )
+        .then((resp) => {
+          commit('getEventsData', resp.data)
+        })
     }
   }
 })
