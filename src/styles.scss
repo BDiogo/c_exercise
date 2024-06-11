@@ -74,3 +74,12 @@ b {
   flex-direction: column;
   justify-content: space-between;
 }
+
+.apexcharts-tooltip-text {
+  padding: 0.5rem;
+  
+  .hightlight {
+    font-size: 1.1em;
+    font-weight: 600;
+  }
+}

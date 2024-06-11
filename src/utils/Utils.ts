@@ -1,9 +1,11 @@
 import type { Data } from '@/shared/interface/Data'
 
 export class Utils {
-  static getMonthName(monthStr: number): string {
+  static readonly shortDaysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+
+  static getMonthName(monthStr: number, short?: boolean): string {
     return new Date(new Date().setUTCMonth(monthStr - 1)).toLocaleString('default', {
-      month: 'long'
+      month: short ? 'short' : 'long'
     })
   }
 
@@ -19,5 +21,16 @@ export class Utils {
   }
   static roundNumber(number: number, decimalCases: number) {
     return parseFloat(number.toFixed(decimalCases))
+  }
+
+  static validateAndGetDayOfWeek(day: number, month: number, year: number): string | boolean {
+    const date = new Date(year, month - 1, day)
+
+    if (date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day) {
+      var dayOfWeek = this.shortDaysOfWeek[date.getDay()]
+      return dayOfWeek
+    } else {
+      return false
+    }
   }
 }

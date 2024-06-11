@@ -23,10 +23,9 @@ export class ChartUtils {
         }
       },
       plotOptions: {
-        heatmap: { radius: 5 }
-      },
-      tooltip: {
-        theme: theme
+        heatmap: {
+          radius: 5
+        }
       },
       markers: {
         colors: '#3eba5f',
@@ -61,17 +60,44 @@ export class ChartUtils {
             colors: '#8c99a8'
           }
         }
+      },
+      dataLabels: {
+        enabled: true,
+        formatter: (
+          val: number,
+          e: { dataPointIndex: number; seriesIndex: number; value: number }
+        ) => {
+          return val
+        }
+      },
+
+      tooltip: {
+        theme: theme,
+        custom: (val: { series: any; seriesIndex: number; dataPointIndex: number; w: any }) => {
+          const dataPoint = val.w.config.series[val.seriesIndex].data[val.dataPointIndex]
+          return `<div class="apexcharts-tooltip-text"><span class="hightlight">${
+            dataPoint.date
+          } ${Utils.getMonthName(dataPoint.x, true)}</span><br>${dataPoint.y} Events </div>`
+        }
       }
     }
   }
 
-  static mapHeatmapData(data: Data, year: number): { name: string; data: number[] }[] {
+  static mapHeatmapData(data: Data, year: number): { name: string; data: any[] }[] {
     const newSeries = []
     if (data[year]?.c) {
       const yearData = data[year]
       for (let key in yearData) {
         if (yearData.hasOwnProperty(key) && yearData[key]?.c) {
-          const dataa = this.maxNumDays.map((e) => yearData[key][e]?.c || 0)
+          const dataa = this.maxNumDays.map((e) => {
+            const date = Utils.validateAndGetDayOfWeek(e, parseInt(key), year)
+            return {
+              y: yearData[key][e]?.c || (date ? 0 : undefined),
+              x: key,
+              year: year,
+              date: e
+            }
+          })
           newSeries.unshift({
             name: Utils.getMonthName(parseInt(key)),
             data: dataa

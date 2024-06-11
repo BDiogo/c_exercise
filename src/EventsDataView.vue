@@ -46,7 +46,7 @@
           <apexchart
             v-if="!!series.length"
             type="heatmap"
-            :height="series.length * 80"
+            :height="series.length * 60"
             :options="ChartUtils.getHeatmapOptions(theme.global.name.value)"
             :series="series"
           ></apexchart>
@@ -67,7 +67,7 @@ import Chip from './shared/Chip.vue'
 
 const theme = useTheme()
 const store = useStore()
-let series = ref<{ name: string; data: number[] }[]>([])
+let series = ref<{ name: string; data: any[] }[]>([])
 let cards = ref<CardMapped[]>([])
 let yearData = ref<EventDetailsModel>()
 const year = store.state?.year

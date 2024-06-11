@@ -33,6 +33,7 @@ function toggleTheme() {
   align-items: center;
   cursor: pointer;
   color: rgb(var(--v-theme-text));
+  
   img {
     height: 2rem;
     object-fit: contain;
