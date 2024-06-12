@@ -96,7 +96,7 @@ let yearData = ref<EventDetailsModel>()
 let options = ref()
 const year = store.state?.year
 const filterOptions = ref<DropdownOption[]>(Utils.getDataOptions())
-let selectedFilter = ref<DropdownOption>(filterOptions.value[2])
+let selectedFilter = ref<DropdownOption>(filterOptions.value[0])
 
 function setData() {
   const data: Data = store.state?.eventsData.value
